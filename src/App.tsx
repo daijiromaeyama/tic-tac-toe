@@ -1,17 +1,10 @@
 import { useState } from 'react'
 import './App.css'
 
-function Square(): JSX.Element {
-  const [value, setValue] = useState<string | null>(null)
-
-  function handleClick(): void {
-    setValue('X')
-  }
-
+function Square({ value }: { value: string | null }): JSX.Element {
   return (
     <button
       className="square"
-      onClick={handleClick}
     >
       {value}
     </button>
@@ -19,22 +12,24 @@ function Square(): JSX.Element {
 }
 
 export default function Board(): JSX.Element {
+  const [squares, setSquares] = useState<Array<string | null>>(Array(9).fill(null))
+
   return (
     <>
       <div className="board-row">
-        <Square />
-        <Square />
-        <Square />
+        <Square value={squares[0]} />
+        <Square value={squares[1]} />
+        <Square value={squares[2]} />
       </div>
-      <div className="board-row">
-        <Square />
-        <Square />
-        <Square />
+      <div className="board-ro">
+        <Square value={squares[3]} />
+        <Square value={squares[4]} />
+        <Square value={squares[5]} />
       </div>
-      <div className="board-row">
-        <Square />
-        <Square />
-        <Square />
+      <div className="board-ro">
+        <Square value={squares[6]} />
+        <Square value={squares[7]} />
+        <Square value={squares[8]} />
       </div>
     </>
   )
