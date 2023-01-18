@@ -57,21 +57,19 @@ function Board({ xIsNext, squares, onPlay }: { xIsNext: boolean, squares: Array<
 }
 
 export default function Game(): JSX.Element {
-  const [xIsNext, setXIsNext] = useState<boolean>(true)
   const [history, setHistory] = useState<Array<Array<string | null>>>([Array(9).fill(null)])
   const [currentMove, setCurrentMove] = useState<number>(0)
+  const xIsNext: boolean = currentMove % 2 === 0
   const currentSquares = history[currentMove]
 
   function handlePlay(nextSquares: Array<string | null>): void {
     const nextHistory: Array<Array<string | null >> = [...history.slice(0, currentMove + 1), nextSquares]
     setHistory(nextHistory)
     setCurrentMove(nextHistory.length - 1)
-    setXIsNext(!xIsNext)
   }
 
   function jumTo(nextMove: number): void {
     setCurrentMove(nextMove)
-    setXIsNext(nextMove % 2 === 0)
   }
 
   const moves: Array<JSX.Element> = history.map((squares, move) => {
