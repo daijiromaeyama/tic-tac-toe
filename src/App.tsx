@@ -68,7 +68,7 @@ export default function Game(): JSX.Element {
     setCurrentMove(nextHistory.length - 1)
   }
 
-  function jumTo(nextMove: number): void {
+  function jumpTo(nextMove: number): void {
     setCurrentMove(nextMove)
   }
 
@@ -81,7 +81,7 @@ export default function Game(): JSX.Element {
     }
     return (
       <li key={move}>
-        <button onClick={() => jumTo(move)}>{description}</button>
+        <button onClick={() => jumpTo(move)}>{description}</button>
       </li>
     )
   })
