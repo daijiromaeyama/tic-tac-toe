@@ -59,12 +59,34 @@ function Board({ xIsNext, squares, onPlay }: { xIsNext: boolean, squares: Array<
 export default function Game(): JSX.Element {
   const [xIsNext, setXIsNext] = useState<boolean>(true)
   const [history, setHistory] = useState<Array<Array<string | null>>>([Array(9).fill(null)])
-  const currentSquares = history[history.length - 1]
+  const [currentMove, setCurrentMove] = useState<number>(0)
+  const currentSquares = history[currentMove]
 
   function handlePlay(nextSquares: Array<string | null>): void {
-    setHistory([...history, nextSquares])
+    const nextHistory: Array<Array<string | null >> = [...history.slice(0, currentMove + 1), nextSquares]
+    setHistory(nextHistory)
+    setCurrentMove(nextHistory.length - 1)
     setXIsNext(!xIsNext)
   }
+
+  function jumTo(nextMove: number): void {
+    setCurrentMove(nextMove)
+    setXIsNext(nextMove % 2 === 0)
+  }
+
+  const moves: Array<JSX.Element> = history.map((squares, move) => {
+    let description: string
+    if (move > 0) {
+      description = 'Go to move #' + move
+    } else {
+      description = 'Go to game start'
+    }
+    return (
+      <li key={move}>
+        <button onClick={() => jumTo(move)}>{description}</button>
+      </li>
+    )
+  })
 
   return (
     <div className="game">
@@ -72,7 +94,7 @@ export default function Game(): JSX.Element {
         <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       </div>
       <div className="game-info">
-        <div>{/*TODO*/}</div>
+        <ol>{moves}</ol>
       </div>
     </div>
   )
