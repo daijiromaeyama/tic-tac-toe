@@ -12,10 +12,7 @@ function Square({ value, onSquareClick }: { value: string | null, onSquareClick:
   )
 }
 
-export default function Board(): JSX.Element {
-  const [xIsNext, setXIsNext] = useState<boolean>(true)
-  const [squares, setSquares] = useState<Array<string | null>>(Array(9).fill(null))
-
+function Board({ xIsNext, squares, onPlay }: { xIsNext: boolean, squares: Array<string | null>, onPlay: (nextSquares: Array<string | null>) => void }): JSX.Element {
   function handleClick(i: number): void {
     if (squares[i] || calculateWinner(squares)) {
       return
@@ -26,8 +23,7 @@ export default function Board(): JSX.Element {
     } else {
       nextSquares[i] = 'O'
     }
-    setSquares(nextSquares)
-    setXIsNext(!xIsNext)
+    onPlay(nextSquares)
   }
 
   const winner: string | null = calculateWinner(squares)
@@ -60,6 +56,28 @@ export default function Board(): JSX.Element {
   )
 }
 
+export default function Game(): JSX.Element {
+  const [xIsNext, setXIsNext] = useState<boolean>(true)
+  const [history, setHistory] = useState<Array<Array<string | null>>>([Array(9).fill(null)])
+  const currentSquares = history[history.length - 1]
+
+  function handlePlay(nextSquares: Array<string | null>): void {
+    setHistory([...history, nextSquares])
+    setXIsNext(!xIsNext)
+  }
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <div>{/*TODO*/}</div>
+      </div>
+    </div>
+  )
+}
+
 function calculateWinner(squares: Array<string | null>): string | null {
   const lines = [
     [0, 1, 2],
@@ -79,3 +97,4 @@ function calculateWinner(squares: Array<string | null>): string | null {
   }
   return null
 }
+
